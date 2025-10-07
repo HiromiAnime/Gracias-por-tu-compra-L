@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gracias por tu compra ✨ - Velvet Temptation</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:"Times New Roman",serif;
+      color:#fffafc;
+      background:#0c0810 url("img/fondo.jpg") center/cover fixed no-repeat;
+      position:relative;
+      min-height:100vh;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    .bg-dim{position:fixed;inset:0;background:rgba(10,8,15,0.55);backdrop-filter:blur(3px);z-index:0;pointer-events:none}
+    canvas#starsCanvas{position:fixed;inset:0;z-index:1;pointer-events:none}
+
+    .wrap{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:72px 18px 60px;text-align:center;gap:18px}
+
+    header h1{
+      font-size:3rem;
+      color:#ffe8f0;
+      text-shadow:0 0 25px rgba(255,220,240,0.35);
+    }
+    header h2{
+      font-size:1.2rem;
+      color:#f2e9ff;
+      max-width:800px;
+      margin:0 auto;
+      font-weight:400;
+    }
+
+    /* Player con estilo personalizado */
+    .player{
+      margin-top:20px;
+      z-index:2;
+      background:rgba(255,255,255,0.1);
+      backdrop-filter:blur(5px);
+      border-radius:12px;
+      padding:18px 26px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .music-btn{
+      background:linear-gradient(135deg,#fff1f9,#ffe7b2);
+      border:none;
+      color:#5a3c5f;
+      font-family:"Times New Roman",serif;
+      font-size:18px;
+      padding:12px 26px;
+      border-radius:999px;
+      cursor:pointer;
+      box-shadow:0 8px 30px rgba(255,220,240,0.25);
+      transition:transform .25s, box-shadow .25s;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+    }
+    .music-btn:hover{
+      transform:translateY(-4px);
+      box-shadow:0 16px 40px rgba(255,230,250,0.35);
+    }
+    .music-btn.playing{
+      background:linear-gradient(135deg,#ffd6f2,#fff5c8);
+      box-shadow:0 16px 50px rgba(255,220,240,0.45);
+      color:#7a567a;
+    }
+
+    .music-btn img{
+      width:22px;
+      height:22px;
+      filter:invert(20%) sepia(20%) saturate(400%) hue-rotate(280deg);
+    }
+
+    /* Swiper */
+    .swiper{width:100%;max-width:1100px;padding:40px 0}
+    .swiper-slide{
+      border-radius:14px;
+      overflow:hidden;
+      background:rgba(255,255,255,0.08);
+      box-shadow:0 10px 30px rgba(0,0,0,0.4);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px;
+      transition:transform .45s ease,box-shadow .35s;
+      cursor:grab;
+    }
+    .swiper-slide:hover{transform:translateY(-8px) scale(1.04);box-shadow:0 25px 60px rgba(250,230,255,0.25)}
+    .swiper-slide img{
+      height:420px;
+      width:auto;
+      object-fit:contain;
+      display:block;
+      border-radius:10px;
+      transition:transform .5s;
+      -webkit-user-drag:none;
+    }
+    .swiper-slide:hover img{transform:scale(1.06)}
+    .swiper-button-next, .swiper-button-prev{color:#ffe7f6}
+    .swiper-pagination-bullet{background:#fff2fa;opacity:.9}
+
+    /* Galería de videos */
+    .video-gallery{
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:28px;
+      justify-items:center;
+      align-items:center;
+      margin-top:40px;
+      width:100%;
+      max-width:1100px;
+    }
+    .video-gallery iframe{
+      width:100%;
+      max-width:500px;
+      aspect-ratio:16/9;
+      border-radius:14px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.4);
+      transition:transform .4s, box-shadow .4s;
+    }
+    .video-gallery iframe:hover{
+      transform:scale(1.03);
+      box-shadow:0 20px 50px rgba(255,230,255,0.3);
+    }
+
+    @media(max-width:800px){
+      .video-gallery{grid-template-columns:1fr;}
+    }
+
+    /* Botón Instagram */
+    .insta-btn{
+      background:linear-gradient(135deg,#fff1f9,#ffe7b2);
+      border:none;
+      color:#5a3c5f;
+      font-family:"Times New Roman",serif;
+      font-size:18px;
+      padding:12px 26px;
+      border-radius:999px;
+      cursor:pointer;
+      box-shadow:0 8px 30px rgba(255,220,240,0.25);
+      transition:transform .25s, box-shadow .25s;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+    }
+    .insta-btn:hover{
+      transform:translateY(-4px);
+      box-shadow:0 16px 40px rgba(255,230,250,0.35);
+    }
+
+    footer{
+      color:#f6ecff;
+      padding:28px 18px;
+      font-size:1rem;
+    }
+
+    @media (max-width:900px){
+      .swiper-slide img{height:340px}
+    }
+    @media (max-width:560px){
+      header h1{font-size:1.8rem}
+      .swiper-slide img{height:280px}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-dim" aria-hidden="true"></div>
+  <canvas id="starsCanvas" aria-hidden="true"></canvas>
+
+  <div class="wrap">
+    <header>
+      <h1> ¡MUCHAS GRACIAS POR TU COMPRA! </h1>
+      <h2>Espero que te encante tu pedido, hecho con mucho amor por Velvet Temptation</h2>
+    </header>
+
+    <!-- Player con botón personalizado -->
+    <div class="player">
+      <audio id="bgAudio" loop>
+        <source src="audio/Ruler of My Heart (VIVINOS - ALNST Original Soundtrack Part.5).mp3" type="audio/mpeg">
+      </audio>
+      <button class="music-btn" id="musicBtn">
+        <img src="https://cdn-icons-png.flaticon.com/512/727/727245.png" alt="play icon">
+        Reproducir música
+      </button>
+    </div>
+
+    <!-- Slider -->
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="img/1.png" alt="Hyuna"></div>
+        <div class="swiper-slide"><img src="img/2.png" alt="Ivan"></div>
+        <div class="swiper-slide"><img src="img/3.png" alt="Luka"></div>
+        <div class="swiper-slide"><img src="img/4.png" alt="Mizi"></div>
+        <div class="swiper-slide"><img src="img/5.png" alt="Sua"></div>
+        <div class="swiper-slide"><img src="img/6.png" alt="Till"></div>
+      </div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Galería de videos -->
+    <div class="video-gallery">
+      <iframe src="https://www.youtube.com/embed/VgPo3q01kbg?si=wWqZ-4ahdDtzNxR6" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/4Dr7HljrsoQ?si=_k3ds_WOtKUuu6XS" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/rrngM9DmDfk?si=Mwz4aENmEN953owd" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/t9EUv_4Q7Sw?si=J9rdo3HzNPCNqF_j" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <footer>
+      Puedes dejar una referencia en 
+      <b><a href="https://velvetemptation.store" target="_blank" style="color:#ffe3f7;text-decoration:none;">velvettemptation.store</a></b>
+      💫<br><br>
+      <a href="https://www.instagram.com/velvetemptation.store" target="_blank" class="insta-btn">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" width="20" height="20">
+        Visítanos en Instagram
+      </a>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+  // Swiper
+  document.addEventListener('DOMContentLoaded', () => {
+    const swiper = new Swiper('.swiper', {
+      slidesPerView: 3,
+      spaceBetween: 28,
+      centeredSlides: true,
+      loop: true,
+      grabCursor: true,
+      autoplay: { delay: 2500, disableOnInteraction: false },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      pagination: { el: '.swiper-pagination', clickable: true },
+      breakpoints: {
+        0: { slidesPerView: 1 },
+        640: { slidesPerView: 2 },
+        980: { slidesPerView: 3 }
+      }
+    });
+  });
+
+  // Botón de música
+  const audio = document.getElementById('bgAudio');
+  const btn = document.getElementById('musicBtn');
+  const icon = btn.querySelector('img');
+
+  btn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      btn.classList.add('playing');
+      btn.textContent = 'Pausar música';
+      btn.prepend(icon);
+      icon.src = "https://cdn-icons-png.flaticon.com/512/151/151882.png";
+    } else {
+      audio.pause();
+      btn.classList.remove('playing');
+      btn.textContent = 'Reproducir música';
+      btn.prepend(icon);
+      icon.src = "https://cdn-icons-png.flaticon.com/512/727/727245.png";
+    }
+  });
+
+  // Fondo de estrellas
+  (function(){
+    const canvas = document.getElementById('starsCanvas');
+    const ctx = canvas.getContext('2d');
+    function resize(){
+      canvas.width = innerWidth * devicePixelRatio;
+      canvas.height = innerHeight * devicePixelRatio;
+      canvas.style.width = innerWidth + 'px';
+      canvas.style.height = innerHeight + 'px';
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    }
+    function pastel(){
+      const c=['255,240,220','255,225,245','235,250,255','255,250,210'];
+      return c[Math.floor(Math.random()*c.length)];
+    }
+    let stars=[];
+    function init(){
+      stars=[];
+      const count=Math.floor((innerWidth+innerHeight)/28);
+      for(let i=0;i<count;i++){
+        stars.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*2+0.6,vy:Math.random()*0.6+0.08,c:pastel(),a:Math.random()*0.7+0.3});
+      }
+    }
+    function draw(){
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      stars.forEach(s=>{
+        s.y+=s.vy;
+        if(s.y>innerHeight+6)s.y=-6;
+        ctx.beginPath();
+        ctx.fillStyle=`rgba(${s.c},${s.a})`;
+        ctx.shadowColor=`rgba(${s.c},${s.a})`;
+        ctx.shadowBlur=s.r*8;
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize',()=>{resize();init();});
+    resize();init();draw();
+  })();
+  </script>
+</body>
+</html>
+
+
+
